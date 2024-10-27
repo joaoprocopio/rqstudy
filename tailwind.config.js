@@ -1,3 +1,6 @@
+import { fontFamily } from "tailwindcss/defaultTheme"
+import animate from "tailwindcss-animate"
+
 /** @type {import("tailwindcss").Config} */
 export default {
   darkMode: ["class"],
@@ -5,16 +8,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          'Inter"',
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-          'Apple Color Emoji"',
-          'Segoe UI Emoji"',
-          'Segoe UI Symbol"',
-          'Noto Color Emoji"',
-        ],
+        sans: ["Inter"].concat(fontFamily.sans),
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,5 +59,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate],
 }
