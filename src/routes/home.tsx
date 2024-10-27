@@ -9,20 +9,23 @@ const homeQuery: () => UseQueryOptions = () => ({
   queryFn: HomeServices.listMembers,
 })
 
+type TLoaderData = { members: any }
+
 export const loader = (queryClient: QueryClient) => () => {
   const query = homeQuery()
 
   return defer({
     members: queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
-  })
+  } satisfies TLoaderData)
 }
 
 export default function Home() {
-  const loaderData = useLoaderData()
+  const loaderData = useLoaderData() as TLoaderData
   const membersQuery = useQuery({
     ...homeQuery(),
     initialData: loaderData.members,
   })
+  console.log(loaderData, membersQuery)
 
   return (
     <div>
