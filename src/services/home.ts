@@ -1,25 +1,9 @@
-// import { httpClient } from "~/services/clients/http"
-
-async function delay(timeout: number): Promise<undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined)
-    }, timeout)
-  })
-}
+import { httpClient } from "~/services/clients/http"
 
 async function listMembers() {
-  await delay(5000)
+  const response = await httpClient.get("/v1/members")
 
-  return new Promise((resolve) => {
-    resolve([
-      {
-        id: 1,
-        name: "John Doe",
-        email: "johndoe@gmail.com",
-      },
-    ])
-  })
+  return response.data
 }
 
 export const HomeServices = {

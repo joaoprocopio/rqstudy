@@ -11,15 +11,21 @@ import router from "~/router"
 const rootEl = document.getElementById("__react")!
 const root = createRoot(rootEl)
 
-startTransition(() =>
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider
-        router={router}
-        future={{
-          v7_startTransition: true,
-        }}
-      />
-    </QueryClientProvider>,
-  ),
-)
+void (async () => {
+  const { worker } = await import("~/mocks/worker")
+
+  await worker.start({ onUnhandledRequest: "bypass" })
+
+  startTransition(() => {
+    root.render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider
+          router={router}
+          future={{
+            v7_startTransition: true,
+          }}
+        />
+      </QueryClientProvider>,
+    )
+  })
+})()
