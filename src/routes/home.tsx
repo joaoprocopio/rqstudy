@@ -1,20 +1,34 @@
-import { useLoaderData } from "react-router-dom"
+import type { QueryClient, UseQueryOptions } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
+import { defer, useLoaderData } from "react-router-dom"
 
-export const loader = () => () => {
-  return {
-    foo: "bar",
-    fizz: "buzz",
-  }
+import { HomeServices } from "~/services/home"
+
+const homeQuery: () => UseQueryOptions = () => ({
+  queryKey: ["home"],
+  queryFn: HomeServices.listMembers,
+})
+
+export const loader = (queryClient: QueryClient) => () => {
+  const query = homeQuery()
+
+  return defer({
+    members: queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
+  })
 }
 
 export default function Home() {
-  const data = useLoaderData() as ReturnType<typeof loader>
-
-  console.log(data)
+  const loaderData = useLoaderData()
+  const membersQuery = useQuery({
+    ...homeQuery(),
+    initialData: loaderData.members,
+  })
 
   return (
     <div>
-      <h1>Home</h1>
+      {membersQuery.isError && <p>Error</p>}
+      {membersQuery.isLoading && <p>Loading...</p>}
+      {membersQuery.isSuccess && <pre>{JSON.stringify(membersQuery.data, null, 2)}</pre>}
     </div>
   )
 }

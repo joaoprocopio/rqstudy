@@ -1,6 +1,8 @@
 import type { RouteObject } from "react-router-dom"
 import { createBrowserRouter } from "react-router-dom"
 
+import queryClient from "~/query/client"
+
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -16,9 +18,10 @@ const routes: RouteObject[] = [
         path: "",
         lazy: async () => {
           const { default: Home, loader: homeLoader } = await import("~/routes/home")
+
           return {
             Component: Home,
-            loader: homeLoader(),
+            loader: homeLoader(queryClient),
           }
         },
       },
