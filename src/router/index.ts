@@ -1,17 +1,38 @@
 import type { RouteObject } from "react-router-dom"
 import { createBrowserRouter } from "react-router-dom"
 
-const routes = [
+const routes: RouteObject[] = [
   {
     path: "/",
     lazy: async () => {
-      const { default: Component } = await import("~/pages/home")
+      const { default: Root } = await import("~/root")
 
       return {
-        Component: Component,
+        Component: Root,
       }
     },
+    children: [
+      {
+        path: "",
+        lazy: async () => {
+          const { default: Home, loader: homeLoader } = await import("~/routes/home")
+          return {
+            Component: Home,
+            loader: homeLoader(),
+          }
+        },
+      },
+    ],
   },
-] as const satisfies RouteObject[]
+]
 
-export const router = createBrowserRouter(routes)
+const router = createBrowserRouter(routes, {
+  future: {
+    v7_fetcherPersist: true,
+    v7_normalizeFormMethod: true,
+    v7_relativeSplatPath: true,
+    v7_skipActionErrorRevalidation: true,
+  },
+})
+
+export default router
