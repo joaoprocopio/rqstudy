@@ -1,4 +1,4 @@
-import "~/tailwind.css"
+import "~/assets/styles/tailwind.css"
 
 import { QueryClientProvider } from "@tanstack/react-query"
 import { startTransition } from "react"
@@ -14,12 +14,7 @@ const root = createRoot(rootEl)
 startTransition(() => {
   root.render(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider
-        router={router}
-        future={{
-          v7_startTransition: true,
-        }}
-      />
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
     </QueryClientProvider>,
   )
 })
