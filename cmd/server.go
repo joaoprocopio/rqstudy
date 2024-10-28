@@ -5,10 +5,11 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"rqsturdy/internal/database"
-	"rqsturdy/internal/server"
 	"sync"
 	"syscall"
+
+	"github.com/joaoprocopio/rqsturdy/internal/database"
+	"github.com/joaoprocopio/rqsturdy/internal/server"
 )
 
 func run(ctx context.Context, logger *server.Logger) error {

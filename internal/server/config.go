@@ -1,6 +1,6 @@
 package server
 
-import "rqsturdy/internal/database"
+import "github.com/joaoprocopio/rqsturdy/internal/database"
 
 type Config struct {
 	Host     string

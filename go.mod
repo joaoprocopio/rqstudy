@@ -1,4 +1,4 @@
-module rqsturdy
+module github.com/joaoprocopio/rqsturdy
 
 go 1.23.1
 
