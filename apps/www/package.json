@@ -1,12 +1,6 @@
 {
   "name": "@rqsturdy/www",
-  "private": true,
-  "sideEffects": false,
   "type": "module",
-  "packageManager": "pnpm@9.12.2",
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",

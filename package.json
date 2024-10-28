@@ -1,5 +1,10 @@
 {
   "name": "rqsturdy",
+  "private": true,
+  "packageManager": "pnpm@9.12.2",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint ."
   },
