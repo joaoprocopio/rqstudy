@@ -6,6 +6,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "pnpm run -r dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint ."
   },
   "devDependencies": {

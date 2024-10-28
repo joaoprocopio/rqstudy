@@ -8,7 +8,7 @@ const app = Fastify({
   },
 })
 
-app.get("/", async (request, reply) => {
+app.get("/", async (_, reply) => {
   reply.send({
     status: 200,
     msg: "ok",
