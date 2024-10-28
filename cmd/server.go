@@ -51,11 +51,11 @@ func run(ctx context.Context, logger *server.Logger) error {
 		<-ctx.Done()
 
 		if err := srv.Shutdown(ctx); err != nil {
-			logger.Fatal.Printf("shutting down server: %s\n", err)
+			logger.Error.Printf("shutting down server: %s\n", err)
 		}
 
 		if err := db.Close(); err != nil {
-			logger.Fatal.Printf("closing database: %s\n", err)
+			logger.Error.Printf("closing database: %s\n", err)
 		}
 	}()
 
