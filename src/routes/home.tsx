@@ -15,23 +15,23 @@ export const loader = (queryClient: QueryClient) => () => {
   const query = homeQuery()
 
   return defer({
-    members: queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
+    members: queryClient.ensureQueryData(query),
   } satisfies TLoaderData)
 }
 
 export default function Home() {
   const loaderData = useLoaderData() as TLoaderData
-  const membersQuery = useQuery({
+  const { isError, isLoading, isSuccess, data } = useQuery({
     ...homeQuery(),
     initialData: loaderData.members,
   })
-  console.log(loaderData, membersQuery)
+  console.log(data)
 
   return (
     <div>
-      {membersQuery.isError && <p>Error</p>}
-      {membersQuery.isLoading && <p>Loading...</p>}
-      {membersQuery.isSuccess && <pre>{JSON.stringify(membersQuery.data, null, 2)}</pre>}
+      {isError && <p>Error</p>}
+      {isLoading && <p>Loading...</p>}
+      {isSuccess && <pre>{JSON.stringify(data, null, 2)}</pre>}
     </div>
   )
 }
