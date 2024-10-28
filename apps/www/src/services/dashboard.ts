@@ -1,11 +1,11 @@
 import { httpClient } from "~/services/clients/http"
 
 async function listMembers() {
-  const response = await httpClient.get("/v1/members")
+  const response = await httpClient.get("/dashboard")
 
   return response.data
 }
 
-export const HomeServices = {
+export const DashboardServices = {
   listMembers,
 }

@@ -2,27 +2,27 @@ import type { QueryClient, UseQueryOptions } from "@tanstack/react-query"
 import { useQuery } from "@tanstack/react-query"
 import { defer, useLoaderData } from "react-router-dom"
 
-import { HomeServices } from "~/services/home"
+import { DashboardServices } from "~/services/dashboard"
 
-const homeQuery: () => UseQueryOptions = () => ({
-  queryKey: ["home"],
-  queryFn: HomeServices.listMembers,
+const dashboardQuery: () => UseQueryOptions = () => ({
+  queryKey: ["dashboard"],
+  queryFn: DashboardServices.listMembers,
 })
 
 type TLoaderData = { members: any }
 
 export const loader = (queryClient: QueryClient) => () => {
-  const query = homeQuery()
+  const query = dashboardQuery()
 
   return defer({
     members: queryClient.ensureQueryData(query),
   } satisfies TLoaderData)
 }
 
-export default function Home() {
+export default function Dashboard() {
   const loaderData = useLoaderData() as TLoaderData
   const { isError, isLoading, isSuccess, data } = useQuery({
-    ...homeQuery(),
+    ...dashboardQuery(),
     initialData: loaderData.members,
   })
   console.log(data)

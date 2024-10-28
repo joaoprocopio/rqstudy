@@ -1,5 +1,5 @@
 import axios from "axios"
 
-export const httpClient = axios.create({
-  baseURL: "/api/",
-})
+import { env } from "~/env"
+
+export const httpClient = axios.create({ baseURL: env.API_URL })

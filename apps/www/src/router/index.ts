@@ -15,13 +15,13 @@ const routes: RouteObject[] = [
     },
     children: [
       {
-        path: "",
+        path: "dashboard",
         lazy: async () => {
-          const { default: Home, loader: homeLoader } = await import("~/routes/home")
+          const { default: Dashboard, loader: dashboardLoader } = await import("~/routes/dashboard")
 
           return {
-            Component: Home,
-            loader: homeLoader(queryClient),
+            Component: Dashboard,
+            loader: dashboardLoader(queryClient),
           }
         },
       },
