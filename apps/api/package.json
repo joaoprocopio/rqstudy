@@ -1,6 +1,13 @@
 {
   "name": "@rqsturdy/api",
   "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts"
+  },
+  "dependencies": {
+    "fastify": "^5.0.0",
+    "pino-pretty": "^11.3.0"
+  },
   "devDependencies": {
     "@types/node": "^22.8.2",
     "tsx": "^4.19.2",
