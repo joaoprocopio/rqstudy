@@ -7,10 +7,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Service interface {
-	Health() error
-}
-
 var db *sql.DB
 
 func New(cfg *Config, ctx context.Context) (*sql.DB, error) {

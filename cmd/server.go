@@ -17,21 +17,21 @@ func run(ctx context.Context, logger *server.Logger) error {
 
 	defer cancel()
 
-	cfg := &server.Config{
+	dbCfg := &database.Config{
+		URL: "./db.sqlite",
+	}
+	srvCfg := &server.Config{
 		Host: "localhost",
 		Port: "8000",
-		Database: &database.Config{
-			URL: "./db.sqlite",
-		},
 	}
 
-	db, err := database.New(cfg.Database, ctx)
+	db, err := database.New(dbCfg, ctx)
 
 	if err != nil {
 		return err
 	}
 
-	srv := server.NewServer(logger, cfg, db)
+	srv := server.NewServer(logger, srvCfg, db)
 
 	go func() {
 		logger.Info.Printf("listening on http://%s\n", srv.Addr)
