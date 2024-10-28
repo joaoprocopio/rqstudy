@@ -1,12 +1,13 @@
 package server
 
 import (
+	"database/sql"
 	"net"
 	"net/http"
 	"time"
 )
 
-func NewServer(logger *Logger, cfg *Config) *http.Server {
+func NewServer(logger *Logger, cfg *Config, db *sql.DB) *http.Server {
 	mux := http.NewServeMux()
 
 	addRoutes(mux)

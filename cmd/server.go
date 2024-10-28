@@ -21,13 +21,17 @@ func run(ctx context.Context, logger *server.Logger) error {
 		Host: "localhost",
 		Port: "8000",
 		Database: &database.Config{
-			Host:     "localhost",
-			Port:     "5432",
-			Password: "postgres",
-			Name:     "postgres",
+			URL: "./sqlite.db",
 		},
 	}
-	srv := server.NewServer(logger, cfg)
+
+	db, err := database.New(cfg.Database)
+
+	if err != nil {
+		return err
+	}
+
+	srv := server.NewServer(logger, cfg, db)
 
 	go func() {
 		logger.Info.Printf("listening on http://%s\n", srv.Addr)
