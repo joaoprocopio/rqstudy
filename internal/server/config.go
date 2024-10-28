@@ -1,14 +1,9 @@
 package server
 
+import "rqsturdy/internal/database"
+
 type Config struct {
 	Host     string
 	Port     string
-	Database *DatabaseConfig
-}
-
-type DatabaseConfig struct {
-	Host     string
-	Port     string
-	Password string
-	Name     string
+	Database *database.Config
 }

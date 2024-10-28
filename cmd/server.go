@@ -5,20 +5,21 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"sync"
-
+	"rqsturdy/internal/database"
 	"rqsturdy/internal/server"
+	"sync"
+	"syscall"
 )
 
 func run(ctx context.Context, logger *server.Logger) error {
-	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 
 	defer cancel()
 
 	cfg := &server.Config{
 		Host: "localhost",
 		Port: "8000",
-		Database: &server.DatabaseConfig{
+		Database: &database.Config{
 			Host:     "localhost",
 			Port:     "5432",
 			Password: "postgres",
