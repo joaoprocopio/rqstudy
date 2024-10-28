@@ -24,6 +24,22 @@
   },
 
   "overrides": [
+    // WWW
+    {
+      "files": "./apps/www/**/*",
+      "parserOptions": {
+        "project": "tsconfig.json",
+        "tsconfigRootDir": "./apps/www/",
+      },
+      "settings": {
+        "import/resolver": {
+          "typescript": {
+            "project": "./apps/www/tsconfig.json",
+          },
+        },
+      },
+    },
+
     // React
     {
       "files": ["**/*.{js,jsx,ts,tsx}"],
