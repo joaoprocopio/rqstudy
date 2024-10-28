@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"database/sql"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -10,23 +11,24 @@ type Service interface {
 	Health() error
 }
 
-var dbInstance *sql.DB
+var db *sql.DB
 
-func New(config *Config) (*sql.DB, error) {
-	if dbInstance != nil {
-		return dbInstance, nil
+func New(cfg *Config, ctx context.Context) (*sql.DB, error) {
+	if db != nil {
+		return db, nil
 	}
 
-	var db *sql.DB
 	var err error
 
-	db, err = sql.Open("sqlite3", config.URL)
+	db, err = sql.Open("sqlite3", cfg.URL)
 
 	if err != nil {
 		return nil, err
 	}
 
-	dbInstance = db
+	if err := db.PingContext(ctx); err != nil {
+		return nil, err
+	}
 
 	return db, nil
 }

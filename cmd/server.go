@@ -21,11 +21,11 @@ func run(ctx context.Context, logger *server.Logger) error {
 		Host: "localhost",
 		Port: "8000",
 		Database: &database.Config{
-			URL: "./sqlite.db",
+			URL: "./db.sqlite",
 		},
 	}
 
-	db, err := database.New(cfg.Database)
+	db, err := database.New(cfg.Database, ctx)
 
 	if err != nil {
 		return err
