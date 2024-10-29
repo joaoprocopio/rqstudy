@@ -9,12 +9,22 @@ export const healthAPI: FastifyPluginAsync = async (app) => {
   })
 }
 
-export const authAPI: FastifyPluginAsync = async (app) => {
-  app.get("/whoami", (_, reply) => {
+export const orgAPI: FastifyPluginAsync = async (app) => {
+  app.get("/", (_, reply) => {
     reply.send({
-      id: 1,
-      name: "John Doe",
-      email: "johdoe@gmail.com",
+      name: "Moray Labs",
+      abbr: "ML",
+    })
+  })
+}
+
+export const authAPI: FastifyPluginAsync = async (app) => {
+  app.get("/user", (_, reply) => {
+    reply.send({
+      photoURL: null,
+      email: "joao@www.com",
+      name: "João Procópio",
+      abbr: "JP",
     })
   })
 }
