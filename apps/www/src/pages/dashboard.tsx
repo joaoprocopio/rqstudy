@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
-import { defer, useLoaderData } from "react-router-dom"
+import { useLoaderData } from "react-router-dom"
 
 import { DashboardServices } from "~/services/dashboard"
 
@@ -10,23 +10,23 @@ const query = queryOptions({
 })
 
 export const loader = (queryClient: QueryClient) => () => {
-  return defer({
+  return {
     members: queryClient.ensureQueryData(query),
-  })
+  }
 }
 
 export default function Dashboard() {
   const loaderData = useLoaderData()
-  const { isError, isLoading, isSuccess, data } = useQuery({
+  const dashboardQuery = useQuery({
     ...query,
     initialData: loaderData.members,
   })
 
   return (
     <div>
-      {isError && <p>Error</p>}
-      {isLoading && <p>Loading...</p>}
-      {isSuccess && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      {dashboardQuery.isError && <p>Error</p>}
+      {dashboardQuery.isLoading && <p>Loading...</p>}
+      {dashboardQuery.isSuccess && <pre>{JSON.stringify(dashboardQuery.data, null, 2)}</pre>}
     </div>
   )
 }
