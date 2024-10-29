@@ -92,13 +92,13 @@ const data = {
   navMain: [
     {
       title: "Playground",
-      url: "#",
+      url: "/playground",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
           title: "History",
-          url: "#",
+          url: "/playground/history",
         },
         {
           title: "Starred",

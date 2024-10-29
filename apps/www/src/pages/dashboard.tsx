@@ -4,17 +4,6 @@ import { useLoaderData } from "react-router-dom"
 
 import { DashboardServices } from "~/services/dashboard"
 
-const query = queryOptions({
-  queryKey: ["dashboard"],
-  queryFn: DashboardServices.listMembers,
-})
-
-export const loader = (queryClient: QueryClient) => () => {
-  return {
-    members: queryClient.ensureQueryData(query),
-  }
-}
-
 export default function Dashboard() {
   const loaderData = useLoaderData()
   const dashboardQuery = useQuery({
@@ -29,4 +18,15 @@ export default function Dashboard() {
       {dashboardQuery.isSuccess && <pre>{JSON.stringify(dashboardQuery.data, null, 2)}</pre>}
     </div>
   )
+}
+
+const query = queryOptions({
+  queryKey: ["dashboard"],
+  queryFn: DashboardServices.listMembers,
+})
+
+export const loader = (queryClient: QueryClient) => () => {
+  return {
+    members: queryClient.ensureQueryData(query),
+  }
 }
