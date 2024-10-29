@@ -1,15 +1,15 @@
-import fp from "fastify-plugin"
+import type { FastifyPluginAsync } from "fastify"
 
-export const healthAPI = fp((app) => {
-  app.get("/health", (_, reply) => {
+export const healthAPI: FastifyPluginAsync = async (app) => {
+  app.get("/", (_, reply) => {
     reply.status(200).send({
       status: 200,
       detail: "ok",
     })
   })
-})
+}
 
-export const authAPI = fp((app) => {
+export const authAPI: FastifyPluginAsync = async (app) => {
   app.get("/whoami", (_, reply) => {
     reply.send({
       id: 1,
@@ -17,4 +17,4 @@ export const authAPI = fp((app) => {
       email: "johdoe@gmail.com",
     })
   })
-})
+}
