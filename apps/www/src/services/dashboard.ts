@@ -1,7 +1,7 @@
 import { httpClient } from "~/services/clients/http"
 
 async function listMembers() {
-  const response = await httpClient.get("/dashboard")
+  const response = await httpClient.get("/")
 
   return response.data
 }

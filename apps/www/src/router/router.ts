@@ -25,6 +25,7 @@ const routes: RouteObject[] = [
         },
         children: [
           {
+            path: "",
             lazy: async () => {
               const { default: Dashboard, loader: dashboardLoader } = await import(
                 "~/pages/dashboard"
