@@ -29,6 +29,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
@@ -147,12 +148,11 @@ export default function DefaultLayout() {
             <SidebarGroup key={groupIndex}>
               {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
 
-              <SidebarMenu>
-                {group.links.map((link) => {
-                  const isActive = location.pathname === link.path
-                  return (
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {group.links.map((link) => (
                     <SidebarMenuButton
-                      isActive={isActive}
+                      isActive={link.path === location.pathname}
                       key={link.path}
                       tooltip={link.title}
                       asChild>
@@ -162,9 +162,9 @@ export default function DefaultLayout() {
                         <span>{link.title}</span>
                       </Link>
                     </SidebarMenuButton>
-                  )
-                })}
-              </SidebarMenu>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
             </SidebarGroup>
           ))}
         </SidebarContent>
