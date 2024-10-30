@@ -2,7 +2,7 @@ import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import { ChevronsUpDown, Home, LogOut, Moon } from "lucide-react"
 import type { Component, ExoticComponent, ReactNode } from "react"
-import { Link, NavLink, Outlet, useLoaderData, useLocation } from "react-router-dom"
+import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import {
@@ -45,16 +45,28 @@ import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
-const links = [
+const linkGroups = [
   {
-    title: "Home",
-    path: "/",
-    icon: Home,
+    links: [
+      {
+        title: "Início",
+        path: "/",
+        icon: Home,
+      },
+    ],
+  },
+
+  {
+    label: "Produtos",
+    links: [],
   },
 ] satisfies Array<{
-  title: string
-  path: string
-  icon: ReactNode | Component | ExoticComponent
+  label?: string
+  links: Array<{
+    title: string
+    path: string
+    icon: ReactNode | Component | ExoticComponent
+  }>
 }>
 
 const userQueryOptions = queryOptions({
@@ -131,28 +143,30 @@ export default function DefaultLayout() {
         </SidebarHeader>
 
         <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          {linkGroups.map((group, groupIndex) => (
+            <SidebarGroup key={groupIndex}>
+              {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
 
-            <SidebarMenu>
-              {links.map((link) => {
-                const isActive = location.pathname === link.path
-                return (
-                  <SidebarMenuButton
-                    isActive={isActive}
-                    key={link.path}
-                    tooltip={link.title}
-                    asChild>
-                    <Link to={link.path}>
-                      {link.icon && <link.icon />}
+              <SidebarMenu>
+                {group.links.map((link) => {
+                  const isActive = location.pathname === link.path
+                  return (
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      key={link.path}
+                      tooltip={link.title}
+                      asChild>
+                      <Link to={link.path}>
+                        {link.icon && <link.icon />}
 
-                      <span>{link.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroup>
+                        <span>{link.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  )
+                })}
+              </SidebarMenu>
+            </SidebarGroup>
+          ))}
         </SidebarContent>
 
         <SidebarFooter>
