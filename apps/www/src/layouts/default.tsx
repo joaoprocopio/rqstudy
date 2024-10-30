@@ -1,24 +1,17 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import {
-  BadgeCheck,
-  Bell,
   BookOpen,
   Bot,
   ChevronRight,
   ChevronsUpDown,
-  CreditCard,
-  Folder,
-  Forward,
   Frame,
   LogOut,
   Map,
   Moon,
-  MoreHorizontal,
   PieChart,
   Settings2,
   SquareTerminal,
-  Trash2,
 } from "lucide-react"
 import { Outlet, useLoaderData } from "react-router-dom"
 
@@ -51,7 +44,6 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -67,112 +59,93 @@ import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
-const data = {
-  navMain: [
-    {
-      title: "Playground",
-      url: "/playground",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "/playground/history",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+const navMain = [
+  {
+    title: "Playground",
+    url: "/playground",
+    icon: SquareTerminal,
+    isActive: true,
+    items: [
+      {
+        title: "History",
+        url: "/playground/history",
+      },
+      {
+        title: "Starred",
+        url: "#",
+      },
+      {
+        title: "Settings",
+        url: "#",
+      },
+    ],
+  },
+  {
+    title: "Models",
+    url: "#",
+    icon: Bot,
+    items: [
+      {
+        title: "Genesis",
+        url: "#",
+      },
+      {
+        title: "Explorer",
+        url: "#",
+      },
+      {
+        title: "Quantum",
+        url: "#",
+      },
+    ],
+  },
+  {
+    title: "Documentation",
+    url: "#",
+    icon: BookOpen,
+    items: [
+      {
+        title: "Introduction",
+        url: "#",
+      },
+      {
+        title: "Get Started",
+        url: "#",
+      },
+      {
+        title: "Tutorials",
+        url: "#",
+      },
+      {
+        title: "Changelog",
+        url: "#",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings2,
+    items: [
+      {
+        title: "General",
+        url: "#",
+      },
+      {
+        title: "Team",
+        url: "#",
+      },
+      {
+        title: "Billing",
+        url: "#",
+      },
+      {
+        title: "Limits",
+        url: "#",
+      },
+    ],
+  },
+]
 
 const userQueryOptions = queryOptions({
   queryKey: ["user"],
@@ -251,7 +224,7 @@ export default function DefaultLayout() {
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
 
             <SidebarMenu>
-              {data.navMain.map((item) => (
+              {navMain.map((item) => (
                 <Collapsible
                   key={item.title}
                   asChild
@@ -290,69 +263,81 @@ export default function DefaultLayout() {
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  {userQuery.isSuccess && (
-                    <SidebarMenuButton
-                      size="lg"
-                      className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                      <Avatar className="h-8 w-8 rounded-lg">
-                        <AvatarImage
-                          src={userQuery.data.photoURL || undefined}
-                          alt={userQuery.data.name}
-                        />
-                        <AvatarFallback className="rounded-lg">
-                          {userQuery.data.abbr}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">{userQuery.data.name}</span>
-                        <span className="truncate text-xs">{userQuery.data.email}</span>
-                      </div>
-                      <ChevronsUpDown className="ml-auto size-4" />
-                    </SidebarMenuButton>
-                  )}
-                </DropdownMenuTrigger>
+                {userQuery.isLoading && (
+                  <div className="flex gap-2 p-2 group-data-[collapsible=icon]:!p-0">
+                    <Skeleton className="aspect-square size-8" />
 
-                <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                  side="bottom"
-                  align="end"
-                  sideOffset={4}>
-                  {userQuery.isSuccess && (
-                    <DropdownMenuLabel className="p-0 font-normal">
-                      <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <div className="flex flex-col justify-between truncate">
+                      <Skeleton className="h-3 w-16" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                  </div>
+                )}
+
+                {userQuery.isSuccess && (
+                  <>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuButton
+                        size="lg"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                         <Avatar className="h-8 w-8 rounded-lg">
                           <AvatarImage
                             src={userQuery.data.photoURL || undefined}
                             alt={userQuery.data.name}
                           />
+
                           <AvatarFallback className="rounded-lg">
                             {userQuery.data.abbr}
                           </AvatarFallback>
                         </Avatar>
-
                         <div className="grid flex-1 text-left text-sm leading-tight">
                           <span className="truncate font-semibold">{userQuery.data.name}</span>
                           <span className="truncate text-xs">{userQuery.data.email}</span>
                         </div>
-                      </div>
-                    </DropdownMenuLabel>
-                  )}
+                        <ChevronsUpDown className="ml-auto size-4" />
+                      </SidebarMenuButton>
+                    </DropdownMenuTrigger>
 
-                  <DropdownMenuSeparator />
+                    <DropdownMenuContent
+                      className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                      side="bottom"
+                      align="end"
+                      sideOffset={4}>
+                      <DropdownMenuLabel className="p-0 font-normal">
+                        <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                          <Avatar className="h-8 w-8 rounded-lg">
+                            <AvatarImage
+                              src={userQuery.data.photoURL || undefined}
+                              alt={userQuery.data.name}
+                            />
+                            <AvatarFallback className="rounded-lg">
+                              {userQuery.data.abbr}
+                            </AvatarFallback>
+                          </Avatar>
 
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Moon />
-                      Toggle theme
-                    </DropdownMenuItem>
+                          <div className="grid flex-1 text-left text-sm leading-tight">
+                            <span className="truncate font-semibold">{userQuery.data.name}</span>
+                            <span className="truncate text-xs">{userQuery.data.email}</span>
+                          </div>
+                        </div>
+                      </DropdownMenuLabel>
 
-                    <DropdownMenuItem>
-                      <LogOut />
-                      Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                          <Moon />
+                          Toggle theme
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem>
+                          <LogOut />
+                          Log out
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </>
+                )}
               </DropdownMenu>
             </SidebarMenuItem>
           </SidebarMenu>
