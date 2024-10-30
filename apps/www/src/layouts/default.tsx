@@ -1,19 +1,16 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import {
-  AudioWaveform,
   BadgeCheck,
   Bell,
   BookOpen,
   Bot,
   ChevronRight,
   ChevronsUpDown,
-  Command,
   CreditCard,
   Folder,
   Forward,
   Frame,
-  GalleryVerticalEnd,
   LogOut,
   Map,
   MoreHorizontal,
@@ -23,7 +20,6 @@ import {
   SquareTerminal,
   Trash2,
 } from "lucide-react"
-import { useState } from "react"
 import { Outlet, useLoaderData } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -66,6 +62,8 @@ import {
   SidebarTrigger,
 } from "~/components/ui/sidebar"
 import { Skeleton } from "~/components/ui/skeleton"
+import type { Org } from "~/schemas/org"
+import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
@@ -191,17 +189,23 @@ const orgQueryOptions = queryOptions({
   queryFn: OrgServices.getOrg,
 })
 
+type LoaderData = {
+  user: Promise<User>
+  org: Promise<Org>
+}
+
 export function loader(queryClient: QueryClient) {
   return function () {
     return {
       user: queryClient.ensureQueryData(userQueryOptions),
       org: queryClient.ensureQueryData(orgQueryOptions),
-    }
+    } satisfies LoaderData
   }
 }
 
 export default function DefaultLayout() {
-  const loaderData = useLoaderData()
+  const loaderData = useLoaderData() as LoaderData
+
   const userQuery = useQuery({
     ...userQueryOptions,
     initialData: loaderData.user,
