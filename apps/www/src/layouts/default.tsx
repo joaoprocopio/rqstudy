@@ -1,3 +1,5 @@
+import type { QueryClient } from "@tanstack/react-query"
+import { queryOptions, useQuery } from "@tanstack/react-query"
 import {
   AudioWaveform,
   BadgeCheck,
@@ -22,7 +24,7 @@ import {
   Trash2,
 } from "lucide-react"
 import { useState } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet, useLoaderData } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import {
@@ -63,6 +65,8 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "~/components/ui/sidebar"
+import { AuthServices } from "~/services/auth"
+import { OrgServices } from "~/services/org"
 
 const data = {
   user: {
@@ -193,7 +197,36 @@ const data = {
   ],
 }
 
-export default function Sidenav() {
+const userQueryOptions = queryOptions({
+  queryKey: ["user"],
+  queryFn: AuthServices.getUser,
+})
+
+const orgQueryOptions = queryOptions({
+  queryKey: ["org"],
+  queryFn: OrgServices.getOrg,
+})
+
+export function loader(queryClient: QueryClient) {
+  return function () {
+    return {
+      user: queryClient.ensureQueryData(userQueryOptions),
+      org: queryClient.ensureQueryData(orgQueryOptions),
+    }
+  }
+}
+
+export default function DefaultLayout() {
+  const loaderData = useLoaderData()
+  const userQuery = useQuery({
+    ...userQueryOptions,
+    initialData: loaderData.user,
+  })
+  const orgQuery = useQuery({
+    ...orgQueryOptions,
+    initialData: loaderData.org,
+  })
+
   const [activeTeam] = useState(data.teams[0])
 
   return (
@@ -202,18 +235,20 @@ export default function Sidenav() {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <activeTeam.logo className="size-4" />
-                </div>
+              {orgQuery.isSuccess && (
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                    {orgQuery.data.abbr}
+                  </div>
 
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{activeTeam.name}</span>
-                  <span className="truncate text-xs">Organização</span>
-                </div>
-              </SidebarMenuButton>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="text-muted-foreground truncate text-xs">Organização</span>
+                    <span className="truncate font-semibold">{orgQuery.data.name}</span>
+                  </div>
+                </SidebarMenuButton>
+              )}
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>

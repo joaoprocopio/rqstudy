@@ -3,10 +3,6 @@ import { createBrowserRouter } from "react-router-dom"
 
 import queryClient from "~/query/client"
 
-/*
- * Dashboard com N endpoints e Filtro e charts
- * Data table com filtragem, pesquisa, ordenação e paginação
- */
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -19,19 +15,21 @@ const routes: RouteObject[] = [
       {
         path: "",
         lazy: async () => {
-          const { default: Default } = await import("~/layouts/default")
+          const { default: DefaultLayout, loader: defaultLayoutLoader } = await import(
+            "~/layouts/default"
+          )
 
-          return { Component: Default }
+          return { Component: DefaultLayout, loader: defaultLayoutLoader(queryClient) }
         },
         children: [
           {
             path: "",
             lazy: async () => {
-              const { default: Dashboard, loader: dashboardLoader } = await import(
+              const { default: DashboardPage, loader: dashboardPageLoader } = await import(
                 "~/pages/dashboard"
               )
 
-              return { Component: Dashboard, loader: dashboardLoader(queryClient) }
+              return { Component: DashboardPage, loader: dashboardPageLoader(queryClient) }
             },
           },
         ],

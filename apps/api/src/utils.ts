@@ -1,9 +1,6 @@
 export async function delay() {
-  const MIN = 100
-  const MAX = 600
-
   await new Promise((resolve) => {
-    setTimeout(resolve, randomNumber(MIN, MAX))
+    setTimeout(resolve, randomNumber(35, 625))
   })
 }
 
