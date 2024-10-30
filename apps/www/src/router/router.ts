@@ -25,11 +25,9 @@ const routes: RouteObject[] = [
           {
             path: "",
             lazy: async () => {
-              const { default: DashboardPage, loader: dashboardPageLoader } = await import(
-                "~/pages/dashboard"
-              )
+              const { default: HomePage } = await import("~/pages/home")
 
-              return { Component: DashboardPage, loader: dashboardPageLoader(queryClient) }
+              return { Component: HomePage }
             },
           },
         ],

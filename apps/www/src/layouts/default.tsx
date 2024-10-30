@@ -1,16 +1,8 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
-import {
-  BookOpen,
-  Bot,
-  ChevronRight,
-  ChevronsUpDown,
-  LogOut,
-  Moon,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
-import { Outlet, useLoaderData } from "react-router-dom"
+import { ChevronsUpDown, Home, LogOut, Moon } from "lucide-react"
+import type { Component, ExoticComponent, ReactNode } from "react"
+import { Link, NavLink, Outlet, useLoaderData, useLocation } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import {
@@ -21,7 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible"
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,9 +35,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
@@ -56,93 +45,17 @@ import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
-const navMain = [
+const links = [
   {
-    title: "Playground",
-    url: "/playground",
-    icon: SquareTerminal,
-    isActive: true,
-    items: [
-      {
-        title: "History",
-        url: "/playground/history",
-      },
-      {
-        title: "Starred",
-        url: "#",
-      },
-      {
-        title: "Settings",
-        url: "#",
-      },
-    ],
+    title: "Home",
+    path: "/",
+    icon: Home,
   },
-  {
-    title: "Models",
-    url: "#",
-    icon: Bot,
-    items: [
-      {
-        title: "Genesis",
-        url: "#",
-      },
-      {
-        title: "Explorer",
-        url: "#",
-      },
-      {
-        title: "Quantum",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Documentation",
-    url: "#",
-    icon: BookOpen,
-    items: [
-      {
-        title: "Introduction",
-        url: "#",
-      },
-      {
-        title: "Get Started",
-        url: "#",
-      },
-      {
-        title: "Tutorials",
-        url: "#",
-      },
-      {
-        title: "Changelog",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings2,
-    items: [
-      {
-        title: "General",
-        url: "#",
-      },
-      {
-        title: "Team",
-        url: "#",
-      },
-      {
-        title: "Billing",
-        url: "#",
-      },
-      {
-        title: "Limits",
-        url: "#",
-      },
-    ],
-  },
-]
+] satisfies Array<{
+  title: string
+  path: string
+  icon: ReactNode | Component | ExoticComponent
+}>
 
 const userQueryOptions = queryOptions({
   queryKey: ["user"],
@@ -170,6 +83,7 @@ export function loader(queryClient: QueryClient) {
 
 export default function DefaultLayout() {
   const loaderData = useLoaderData() as LoaderData
+  const location = useLocation()
 
   const userQuery = useQuery({
     ...userQueryOptions,
@@ -221,37 +135,22 @@ export default function DefaultLayout() {
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
 
             <SidebarMenu>
-              {navMain.map((item) => (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
-                        {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
+              {links.map((link) => {
+                const isActive = location.pathname === link.path
+                return (
+                  <SidebarMenuButton
+                    isActive={isActive}
+                    key={link.path}
+                    tooltip={link.title}
+                    asChild>
+                    <Link to={link.path}>
+                      {link.icon && <link.icon />}
 
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              ))}
+                      <span>{link.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
@@ -323,11 +222,6 @@ export default function DefaultLayout() {
 
                       <DropdownMenuGroup>
                         <DropdownMenuItem>
-                          <Moon />
-                          Toggle theme
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem>
                           <LogOut />
                           Log out
                         </DropdownMenuItem>
@@ -344,10 +238,13 @@ export default function DefaultLayout() {
       </Sidebar>
 
       <SidebarInset>
-        <header className="bg-background sticky inset-0 flex h-16 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
+        <header className="bg-background sticky inset-0 flex h-16 w-full shrink-0 items-center justify-between border-b px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+
             <Separator orientation="vertical" className="mr-2 h-4" />
+
+            {/* TODO: fazer o breadcrumb funcional */}
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
@@ -362,6 +259,12 @@ export default function DefaultLayout() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
+
+          <Button variant="ghost" size="icon" className="h-7 w-7">
+            <Moon />
+
+            <span className="sr-only">Toggle Theme</span>
+          </Button>
         </header>
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
