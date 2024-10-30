@@ -20,7 +20,7 @@ import {
   SquareTerminal,
   Trash2,
 } from "lucide-react"
-import { Outlet, useLoaderData } from "react-router-dom"
+import { defer, Outlet, useLoaderData } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import {
@@ -208,11 +208,11 @@ export default function DefaultLayout() {
 
   const userQuery = useQuery({
     ...userQueryOptions,
-    initialData: loaderData.user,
+    initialData: loaderData.user as unknown as User,
   })
   const orgQuery = useQuery({
     ...orgQueryOptions,
-    initialData: loaderData.org,
+    initialData: loaderData.org as unknown as Org,
   })
 
   return (
