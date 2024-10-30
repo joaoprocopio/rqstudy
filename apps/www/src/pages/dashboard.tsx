@@ -7,5 +7,5 @@ export function loader(queryClient: QueryClient) {
 }
 
 export default function DashboardPage() {
-  return <div className="h-[15000px]">dashboard</div>
+  return <div className="container h-[15000px] py-6">Dashboard</div>
 }
