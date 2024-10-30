@@ -218,10 +218,10 @@ export default function DefaultLayout() {
           <SidebarMenu>
             <SidebarMenuItem>
               {orgQuery.isLoading && (
-                <div className="m-2 flex gap-2">
-                  <Skeleton className="size-8" />
+                <div className="flex gap-2 p-2 group-data-[collapsible=icon]:!p-0">
+                  <Skeleton className="aspect-square size-8" />
 
-                  <div className="flex flex-col justify-between">
+                  <div className="flex flex-col justify-between truncate">
                     <Skeleton className="h-3 w-16" />
                     <Skeleton className="h-4 w-24" />
                   </div>
