@@ -65,6 +65,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "~/components/ui/sidebar"
+import { Skeleton } from "~/components/ui/skeleton"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
@@ -74,23 +75,6 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Playground",
@@ -227,18 +211,28 @@ export default function DefaultLayout() {
     initialData: loaderData.org,
   })
 
-  const [activeTeam] = useState(data.teams[0])
-
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
+              {orgQuery.isLoading && (
+                <div className="m-2 flex gap-2">
+                  <Skeleton className="size-8" />
+
+                  <div className="flex flex-col justify-between">
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+              )}
+
               {orgQuery.isSuccess && (
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  tooltip={orgQuery.data.name}>
                   <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                     {orgQuery.data.abbr}
                   </div>

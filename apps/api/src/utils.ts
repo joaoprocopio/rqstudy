@@ -1,6 +1,6 @@
-export async function delay() {
+export async function delay(timeout: number) {
   await new Promise((resolve) => {
-    setTimeout(resolve, randomNumber(35, 625))
+    setTimeout(resolve, timeout)
   })
 }
 

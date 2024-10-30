@@ -1,9 +1,9 @@
 import fp from "fastify-plugin"
 
-import { delay } from "./utils"
+import { delay, randomNumber } from "./utils"
 
 export const delayMiddleware = fp(async (app) => {
   app.addHook("onRequest", async () => {
-    await delay()
+    await delay(randomNumber(150, 600))
   })
 })
