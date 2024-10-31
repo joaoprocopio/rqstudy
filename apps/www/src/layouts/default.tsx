@@ -5,13 +5,6 @@ import type { ExoticComponent } from "react"
 import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -22,7 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
-import { Separator } from "~/components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +32,7 @@ import {
   SidebarTrigger,
 } from "~/components/ui/sidebar"
 import { Skeleton } from "~/components/ui/skeleton"
+import { useTheme } from "~/hooks/use-theme"
 import type { Org } from "~/schemas/org"
 import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
@@ -63,9 +56,6 @@ const linkGroups: Array<{
     ],
   },
 ]
-const breadcrumbs: Record<string, string> = {
-  "/": "Início",
-}
 
 const userQueryOptions = queryOptions({
   queryKey: ["user"],
@@ -82,12 +72,6 @@ type LoaderData = {
   org: Promise<Org>
 }
 
-function matchRoutes(pathname: string) {
-  const splitRoutes = pathname.split(/(?=\/)/g)
-
-  return splitRoutes.map((_, index) => splitRoutes.slice(0, index + 1).join(""))
-}
-
 export function loader(queryClient: QueryClient) {
   return function () {
     return {
@@ -100,7 +84,7 @@ export function loader(queryClient: QueryClient) {
 export default function DefaultLayout() {
   const loaderData = useLoaderData() as LoaderData
   const location = useLocation()
-  const routes = matchRoutes(location.pathname)
+  const { theme, setTheme } = useTheme()
 
   const userQuery = useQuery({
     ...userQueryOptions,
@@ -257,28 +241,7 @@ export default function DefaultLayout() {
 
       <SidebarInset>
         <header className="bg-background sticky inset-0 flex h-16 w-full shrink-0 items-center justify-between border-b px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2">
-            <SidebarTrigger />
-
-            <Separator orientation="vertical" className="mr-2 h-4" />
-
-            {/* TODO: fazer o breadcrumb funcional */}
-            <Breadcrumb>
-              <BreadcrumbList>
-                {routes.map((route, index) => (
-                  <div key={route}>
-                    {index > 0 && <BreadcrumbSeparator />}
-
-                    <BreadcrumbItem className={index > 0 ? "hidden md:block" : undefined}>
-                      <BreadcrumbLink asChild>
-                        <Link to={route}>{breadcrumbs[route]}</Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </div>
-                ))}
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
+          <SidebarTrigger />
 
           <Button variant="ghost" size="icon" className="h-7 w-7">
             <Moon />
