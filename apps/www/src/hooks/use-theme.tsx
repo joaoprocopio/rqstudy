@@ -8,11 +8,11 @@ const themeAtom = atom(
   (get) => {
     return get(baseThemeAtom)
   },
-  (get, set, nextTheme: Theme) => {
-    const root = window.document.documentElement
+  (_, set, nextTheme: Theme) => {
+    const rootEl = window.document.documentElement
 
-    root.classList.remove("light", "dark")
-    root.classList.add(nextTheme)
+    rootEl.classList.remove("light", "dark")
+    rootEl.classList.add(nextTheme)
 
     set(baseThemeAtom, nextTheme)
   },
@@ -21,20 +21,20 @@ themeAtom.onMount = (set) => {
   const store = getDefaultStore()
   const currTheme = store.get(themeAtom)
 
-  const root = window.document.documentElement
+  const rootEl = window.document.documentElement
 
-  root.classList.remove("light", "dark")
+  rootEl.classList.remove("light", "dark")
 
   if (currTheme === "system") {
-    const preferesDark: boolean = window.matchMedia("(prefers-color-scheme: dark)").matches
-    const preferenceTheme: Theme = preferesDark ? "dark" : "light"
+    const prefersDarkTheme: boolean = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const preferenceTheme: Theme = prefersDarkTheme ? "dark" : "light"
 
-    root.classList.add(preferenceTheme)
+    rootEl.classList.add(preferenceTheme)
     set(preferenceTheme)
     return
   }
 
-  root.classList.add(currTheme)
+  rootEl.classList.add(currTheme)
   set(currTheme)
 }
 
