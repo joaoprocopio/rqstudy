@@ -249,12 +249,10 @@ export default function DefaultLayout() {
 
           <Button onClick={toggleTheme} variant="ghost" size="icon" className="h-7 w-7">
             {theme === "dark" ? <Sun /> : <Moon />}
-
-            <span className="sr-only">Toggle Theme</span>
           </Button>
         </header>
 
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div>
           <Outlet />
         </div>
       </SidebarInset>
