@@ -84,7 +84,7 @@ export function loader(queryClient: QueryClient) {
 export default function DefaultLayout() {
   const loaderData = useLoaderData() as LoaderData
   const location = useLocation()
-  const { theme, setTheme } = useTheme()
+  const [theme, setTheme] = useTheme()
 
   const userQuery = useQuery({
     ...userQueryOptions,
