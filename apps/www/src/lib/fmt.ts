@@ -19,7 +19,7 @@ export function formatPercentage(value: number, options: Intl.NumberFormatOption
 }
 
 export function formatCurrency(value: number, options: Intl.NumberFormatOptions = {}) {
-  options.style = "percent"
+  options.style = "currency"
   options.currency = "BRL"
 
   const formatter = Intl.NumberFormat(locale, options)

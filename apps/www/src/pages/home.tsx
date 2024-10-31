@@ -1,4 +1,5 @@
-import { DollarSign, TrendingUp } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
+import { HandCoins, Landmark, Wallet } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
@@ -14,36 +15,54 @@ export default function HomePage() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm">Receita Total</CardTitle>
+        <CustomCard
+          title="Receita total"
+          icon={Landmark}
+          value={formatCurrency(45_231.89)}
+          pastValue={formatPercentage(0.201, { signDisplay: "always" })}
+        />
 
-            <DollarSign className="text-muted-foreground size-5" />
-          </CardHeader>
+        <CustomCard
+          title="Vendas"
+          icon={Wallet}
+          value={formatInteger(12_234)}
+          pastValue={formatPercentage(0.19, { signDisplay: "always" })}
+        />
 
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(45_231.89)}</p>
-            <p className="text-muted-foreground text-xs">
-              {formatPercentage(0.201, { signDisplay: "always" })} desde o último mês
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm">Vendas</CardTitle>
-
-            <TrendingUp className="text-muted-foreground size-5" />
-          </CardHeader>
-
-          <CardContent>
-            <p className="text-2xl font-bold">{formatInteger(12_234)}</p>
-            <p className="text-muted-foreground text-xs">
-              {formatPercentage(0.19, { signDisplay: "always" })} desde o último mês
-            </p>
-          </CardContent>
-        </Card>
+        <CustomCard
+          title="Ticket médio"
+          icon={HandCoins}
+          value={formatCurrency(35.02)}
+          pastValue={formatPercentage(-0.1468, { signDisplay: "always" })}
+        />
       </div>
     </div>
+  )
+}
+
+function CustomCard({
+  title,
+  icon: Icon,
+  value,
+  pastValue,
+}: {
+  title: string
+  icon: LucideIcon
+  value: string
+  pastValue: string
+}) {
+  return (
+    <Card>
+      <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm">{title}</CardTitle>
+
+        <Icon className="text-muted-foreground size-5" />
+      </CardHeader>
+
+      <CardContent>
+        <p className="text-2xl font-bold">{value}</p>
+        <p className="text-muted-foreground text-xs">{pastValue} desde o último mês</p>
+      </CardContent>
+    </Card>
   )
 }
