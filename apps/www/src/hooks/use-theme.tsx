@@ -1,12 +1,22 @@
-import { getDefaultStore, useAtom } from "jotai"
+import { atom, getDefaultStore, useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
 type Theme = "dark" | "light" | "system"
 
-const themeAtom = atomWithStorage<Theme>("theme", "system", undefined, {
-  getOnInit: true,
-})
+const baseThemeAtom = atomWithStorage<Theme>("theme", "system", undefined, { getOnInit: true })
+const themeAtom = atom(
+  (get) => {
+    return get(baseThemeAtom)
+  },
+  (get, set, nextTheme: Theme) => {
+    const root = window.document.documentElement
 
+    root.classList.remove("light", "dark")
+    root.classList.add(nextTheme)
+
+    set(baseThemeAtom, nextTheme)
+  },
+)
 themeAtom.onMount = (set) => {
   const store = getDefaultStore()
   const currTheme = store.get(themeAtom)
