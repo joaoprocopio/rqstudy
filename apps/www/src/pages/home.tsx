@@ -60,14 +60,14 @@ function CustomCard({
 }) {
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm">{title}</CardTitle>
+      <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+        <CardTitle className="text-lg">{title}</CardTitle>
 
         <Icon className="text-muted-foreground size-5" />
       </CardHeader>
 
       <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
+        <p className="text-xl font-bold">{value}</p>
         <p className="text-muted-foreground text-xs">{pastValue} desde o último mês</p>
       </CardContent>
     </Card>
