@@ -1,9 +1,9 @@
 import { getDefaultStore, useAtom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
-type Theme = "dark" | "light"
+type Theme = "dark" | "light" | "system"
 
-const themeAtom = atomWithStorage<Theme | "system">("theme", "system", undefined, {
+const themeAtom = atomWithStorage<Theme>("theme", "system", undefined, {
   getOnInit: true,
 })
 

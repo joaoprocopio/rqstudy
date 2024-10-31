@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
-import { ChevronsUpDown, Home, LogOut, Moon } from "lucide-react"
+import { ChevronsUpDown, Home, LogOut, Moon, Sun } from "lucide-react"
 import type { ExoticComponent } from "react"
 import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom"
 
@@ -94,6 +94,10 @@ export default function DefaultLayout() {
     ...orgQueryOptions,
     initialData: loaderData.org as unknown as Org,
   })
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
 
   return (
     <SidebarProvider>
@@ -243,8 +247,8 @@ export default function DefaultLayout() {
         <header className="bg-background sticky inset-0 flex h-16 w-full shrink-0 items-center justify-between border-b px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <SidebarTrigger />
 
-          <Button variant="ghost" size="icon" className="h-7 w-7">
-            <Moon />
+          <Button onClick={toggleTheme} variant="ghost" size="icon" className="h-7 w-7">
+            {theme === "dark" ? <Sun /> : <Moon />}
 
             <span className="sr-only">Toggle Theme</span>
           </Button>
