@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import { ChevronsUpDown, Home, LogOut, Moon } from "lucide-react"
-import type { Component, ExoticComponent, ReactNode } from "react"
+import type { ExoticComponent } from "react"
 import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
@@ -10,7 +10,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb"
 import { Button } from "~/components/ui/button"
@@ -46,7 +45,14 @@ import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
-const linkGroups = [
+const linkGroups: Array<{
+  label?: string
+  links: Array<{
+    title: string
+    path: string
+    icon: ExoticComponent
+  }>
+}> = [
   {
     links: [
       {
@@ -56,19 +62,10 @@ const linkGroups = [
       },
     ],
   },
-
-  {
-    label: "Produtos",
-    links: [],
-  },
-] satisfies Array<{
-  label?: string
-  links: Array<{
-    title: string
-    path: string
-    icon: ReactNode | Component | ExoticComponent
-  }>
-}>
+]
+const breadcrumbs: Record<string, string> = {
+  "/": "Início",
+}
 
 const userQueryOptions = queryOptions({
   queryKey: ["user"],
@@ -85,6 +82,12 @@ type LoaderData = {
   org: Promise<Org>
 }
 
+function matchRoutes(pathname: string) {
+  const splitRoutes = pathname.split(/(?=\/)/g)
+
+  return splitRoutes.map((_, index) => splitRoutes.slice(0, index + 1).join(""))
+}
+
 export function loader(queryClient: QueryClient) {
   return function () {
     return {
@@ -97,6 +100,7 @@ export function loader(queryClient: QueryClient) {
 export default function DefaultLayout() {
   const loaderData = useLoaderData() as LoaderData
   const location = useLocation()
+  const routes = matchRoutes(location.pathname)
 
   const userQuery = useQuery({
     ...userQueryOptions,
@@ -261,15 +265,17 @@ export default function DefaultLayout() {
             {/* TODO: fazer o breadcrumb funcional */}
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
-                </BreadcrumbItem>
+                {routes.map((route, index) => (
+                  <div key={route}>
+                    {index > 0 && <BreadcrumbSeparator />}
 
-                <BreadcrumbSeparator className="hidden md:block" />
-
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                    <BreadcrumbItem className={index > 0 ? "hidden md:block" : undefined}>
+                      <BreadcrumbLink asChild>
+                        <Link to={route}>{breadcrumbs[route]}</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </div>
+                ))}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
