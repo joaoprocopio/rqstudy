@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { HandCoins, Landmark, Wallet } from "lucide-react"
+import { HandCoins, Landmark, Users, Wallet } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
@@ -25,15 +25,22 @@ export default function HomePage() {
         <CustomCard
           title="Vendas"
           icon={Wallet}
-          value={formatInteger(12_234)}
+          value={formatInteger(12_234, { signDisplay: "always" })}
           pastValue={formatPercentage(0.19, { signDisplay: "always" })}
         />
 
         <CustomCard
           title="Ticket médio"
           icon={HandCoins}
-          value={formatCurrency(35.02)}
+          value={formatCurrency(35.02, { signDisplay: "always" })}
           pastValue={formatPercentage(-0.1468, { signDisplay: "always" })}
+        />
+
+        <CustomCard
+          title="Novos usuários"
+          icon={Users}
+          value={formatInteger(74, { signDisplay: "always" })}
+          pastValue={formatPercentage(0.4231, { signDisplay: "always" })}
         />
       </div>
     </div>
