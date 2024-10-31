@@ -1,9 +1,5 @@
 import type { FastifyPluginAsync } from "fastify"
 
-/*
- * Dashboard com N endpoints e Filtro e charts
- * Data table com filtragem, pesquisa, ordenação e paginação
- */
 export const healthAPI: FastifyPluginAsync = async (app) => {
   app.get("/", (_, reply) => {
     reply.status(200).send({
