@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import { formatCurrency, formatPercentage } from "~/lib/fmt"
 
 export default function HomePage() {
   return (
@@ -10,8 +11,10 @@ export default function HomePage() {
           </CardHeader>
 
           <CardContent>
-            <p className="text-2xl font-bold">R$23.532,89</p>
-            <p className="text-muted-foreground text-xs">+20.1% em relação ao mês anterior</p>
+            <p className="text-2xl font-bold">{formatCurrency(3252.534)}</p>
+            <p className="text-muted-foreground text-xs">
+              {formatPercentage(0.253, { signDisplay: "always" })} em relação ao mês anterior
+            </p>
           </CardContent>
         </Card>
       </header>
