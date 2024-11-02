@@ -3,6 +3,7 @@ import { HandCoins, Landmark, Users, Wallet } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { H1, P } from "~/components/ui/typography"
 import { formatCurrency, formatInteger, formatPercentage } from "~/lib/fmt"
 
@@ -17,36 +18,64 @@ export default function HomePage() {
 
       <section className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <HomeInfo
-          title="Receita total"
+          title={TABS.RECEITA_TOTAL.TITLE}
           icon={Landmark}
           value={formatCurrency(45_231.89)}
           pastValue={formatPercentage(0.201, { signDisplay: "always" })}
         />
 
         <HomeInfo
-          title="Vendas"
+          title={TABS.VENDAS.TITLE}
           icon={Wallet}
           value={formatInteger(12_234, { signDisplay: "always" })}
           pastValue={formatPercentage(0.19, { signDisplay: "always" })}
         />
 
         <HomeInfo
-          title="Ticket médio"
+          title={TABS.TICKET_MEDIO.TITLE}
           icon={HandCoins}
           value={formatCurrency(35.02, { signDisplay: "always" })}
           pastValue={formatPercentage(-0.1468, { signDisplay: "always" })}
         />
 
         <HomeInfo
-          title="Novos usuários"
+          title={TABS.NOVOS_CLIENTES.TITLE}
           icon={Users}
           value={formatInteger(74, { signDisplay: "always" })}
           pastValue={formatPercentage(0.4231, { signDisplay: "always" })}
         />
       </section>
+
+      <Tabs defaultValue={TABS.RECEITA_TOTAL.KEY} className="space-y-4">
+        <TabsList>
+          <TabsTrigger value={TABS.RECEITA_TOTAL.KEY}>{TABS.RECEITA_TOTAL.TITLE}</TabsTrigger>
+          <TabsTrigger value={TABS.VENDAS.KEY}>{TABS.VENDAS.TITLE}</TabsTrigger>
+          <TabsTrigger value={TABS.TICKET_MEDIO.KEY}>{TABS.TICKET_MEDIO.TITLE}</TabsTrigger>
+          <TabsTrigger value={TABS.NOVOS_CLIENTES.KEY}>{TABS.NOVOS_CLIENTES.TITLE}</TabsTrigger>
+        </TabsList>
+      </Tabs>
     </div>
   )
 }
+
+const TABS = {
+  RECEITA_TOTAL: {
+    KEY: "receita-total",
+    TITLE: "Receita total",
+  },
+  VENDAS: {
+    KEY: "vendas",
+    TITLE: "Vendas",
+  },
+  TICKET_MEDIO: {
+    KEY: "ticket-medio",
+    TITLE: "Ticket médio",
+  },
+  NOVOS_CLIENTES: {
+    KEY: "novos-clientes",
+    TITLE: "Novos clientes",
+  },
+} as const satisfies { [tab: string]: { KEY: string; TITLE: string } }
 
 function HomeInfo({
   title,
