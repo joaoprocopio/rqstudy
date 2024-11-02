@@ -15,28 +15,28 @@ export default function HomePage() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        <CustomCard
+        <HomeInfo
           title="Receita total"
           icon={Landmark}
           value={formatCurrency(45_231.89)}
           pastValue={formatPercentage(0.201, { signDisplay: "always" })}
         />
 
-        <CustomCard
+        <HomeInfo
           title="Vendas"
           icon={Wallet}
           value={formatInteger(12_234, { signDisplay: "always" })}
           pastValue={formatPercentage(0.19, { signDisplay: "always" })}
         />
 
-        <CustomCard
+        <HomeInfo
           title="Ticket médio"
           icon={HandCoins}
           value={formatCurrency(35.02, { signDisplay: "always" })}
           pastValue={formatPercentage(-0.1468, { signDisplay: "always" })}
         />
 
-        <CustomCard
+        <HomeInfo
           title="Novos usuários"
           icon={Users}
           value={formatInteger(74, { signDisplay: "always" })}
@@ -47,7 +47,7 @@ export default function HomePage() {
   )
 }
 
-function CustomCard({
+function HomeInfo({
   title,
   icon: Icon,
   value,
