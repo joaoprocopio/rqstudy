@@ -3,7 +3,7 @@ import { HandCoins, Landmark, Users, Wallet } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { H1, P } from "~/components/ui/typography"
 import { formatCurrency, formatInteger, formatPercentage } from "~/lib/fmt"
 
@@ -53,29 +53,18 @@ export default function HomePage() {
           <TabsTrigger value={TABS.TICKET_MEDIO.KEY}>{TABS.TICKET_MEDIO.TITLE}</TabsTrigger>
           <TabsTrigger value={TABS.NOVOS_CLIENTES.KEY}>{TABS.NOVOS_CLIENTES.TITLE}</TabsTrigger>
         </TabsList>
+
+        <TabsContent value={TABS.RECEITA_TOTAL.KEY}>TODO(WIP): A</TabsContent>
+
+        <TabsContent value={TABS.VENDAS.KEY}>TODO(WIP): B</TabsContent>
+
+        <TabsContent value={TABS.TICKET_MEDIO.KEY}>TODO(WIP): C</TabsContent>
+
+        <TabsContent value={TABS.NOVOS_CLIENTES.KEY}>TODO(WIP): D</TabsContent>
       </Tabs>
     </div>
   )
 }
-
-const TABS = {
-  RECEITA_TOTAL: {
-    KEY: "receita-total",
-    TITLE: "Receita total",
-  },
-  VENDAS: {
-    KEY: "vendas",
-    TITLE: "Vendas",
-  },
-  TICKET_MEDIO: {
-    KEY: "ticket-medio",
-    TITLE: "Ticket médio",
-  },
-  NOVOS_CLIENTES: {
-    KEY: "novos-clientes",
-    TITLE: "Novos clientes",
-  },
-} as const satisfies { [tab: string]: { KEY: string; TITLE: string } }
 
 function HomeInfo({
   title,
@@ -103,3 +92,22 @@ function HomeInfo({
     </Card>
   )
 }
+
+const TABS = {
+  RECEITA_TOTAL: {
+    KEY: "receita-total",
+    TITLE: "Receita total",
+  },
+  VENDAS: {
+    KEY: "vendas",
+    TITLE: "Vendas",
+  },
+  TICKET_MEDIO: {
+    KEY: "ticket-medio",
+    TITLE: "Ticket médio",
+  },
+  NOVOS_CLIENTES: {
+    KEY: "novos-clientes",
+    TITLE: "Novos clientes",
+  },
+} as const satisfies { [tab: string]: { KEY: string; TITLE: string } }
