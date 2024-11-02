@@ -7,14 +7,14 @@ import { formatCurrency, formatInteger, formatPercentage } from "~/lib/fmt"
 
 export default function HomePage() {
   return (
-    <div className="container space-y-12 py-8">
+    <div className="container space-y-10 py-8">
       <header className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Início</h1>
 
         <DateRangePicker />
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <HomeInfo
           title="Receita total"
           icon={Landmark}
@@ -42,7 +42,7 @@ export default function HomePage() {
           value={formatInteger(74, { signDisplay: "always" })}
           pastValue={formatPercentage(0.4231, { signDisplay: "always" })}
         />
-      </div>
+      </section>
     </div>
   )
 }
