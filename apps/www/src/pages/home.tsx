@@ -3,13 +3,14 @@ import { HandCoins, Landmark, Users, Wallet } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
+import { H1, P } from "~/components/ui/typography"
 import { formatCurrency, formatInteger, formatPercentage } from "~/lib/fmt"
 
 export default function HomePage() {
   return (
     <div className="container space-y-10 py-8">
       <header className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Início</h1>
+        <H1>Início</H1>
 
         <DateRangePicker />
       </header>
@@ -67,8 +68,8 @@ function HomeInfo({
       </CardHeader>
 
       <CardContent>
-        <p className="text-xl font-bold">{value}</p>
-        <p className="text-muted-foreground text-xs">{pastValue} desde o último mês</p>
+        <P className="text-xl font-bold">{value}</P>
+        <P className="text-muted-foreground mt-0.5 text-xs">{pastValue} desde o último mês</P>
       </CardContent>
     </Card>
   )
