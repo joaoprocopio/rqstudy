@@ -24,9 +24,11 @@ const chartData = [
 const chartConfig = {
   desktop: {
     label: "Desktop",
+    color: "hsl(var(--chart-1))",
   },
   mobile: {
     label: "Mobile",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
@@ -142,13 +144,11 @@ export default function HomePage() {
                     activeDot={{
                       r: 4,
                       style: {
-                        fill: "hsl(var(--muted-foreground))",
-                        opacity: 0.65,
+                        fill: "var(--color-mobile)",
                       },
                     }}
                     style={{
-                      stroke: "hsl(var(--muted-foreground))",
-                      opacity: 0.65,
+                      stroke: "var(--color-mobile)",
                     }}
                   />
 
@@ -159,11 +159,11 @@ export default function HomePage() {
                     activeDot={{
                       r: 6,
                       style: {
-                        fill: "hsl(var(--primary))",
+                        fill: "var(--color-desktop)",
                       },
                     }}
                     style={{
-                      stroke: "hsl(var(--primary))",
+                      stroke: "var(--color-desktop)",
                     }}
                   />
                 </LineChart>
