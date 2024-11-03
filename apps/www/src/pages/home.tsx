@@ -6,7 +6,12 @@ import type { DateRange } from "react-day-picker"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
-import { ChartConfig, ChartContainer, ChartTooltip } from "~/components/ui/chart"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "~/components/ui/chart"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { H1, P } from "~/components/ui/typography"
@@ -107,35 +112,7 @@ export default function HomePage() {
                     tickFormatter={(value) => value.slice(0, 3)}
                   />
 
-                  <ChartTooltip
-                    cursor={false}
-                    content={({ active, payload }) => {
-                      if (!(active && Array.isArray(payload))) {
-                        return null
-                      }
-
-                      return (
-                        <div className="bg-background rounded-lg border p-2 shadow-sm">
-                          <div className="grid grid-cols-2 gap-2">
-                            <div className="flex flex-col">
-                              <span className="text-muted-foreground text-[0.70rem] uppercase">
-                                Ano anterior
-                              </span>
-                              <span className="text-muted-foreground font-bold">
-                                {payload.at(0)?.value}
-                              </span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-muted-foreground text-[0.70rem] uppercase">
-                                Hoje
-                              </span>
-                              <span className="font-bold">{payload.at(0)?.value}</span>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    }}
-                  />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
 
                   <Line
                     type="monotone"
