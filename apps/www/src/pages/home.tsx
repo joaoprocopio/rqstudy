@@ -1,19 +1,54 @@
+import { addDays, intervalToDuration } from "date-fns"
 import type { LucideIcon } from "lucide-react"
 import { HandCoins, Landmark, Users, Wallet } from "lucide-react"
+import { useState } from "react"
+import type { DateRange } from "react-day-picker"
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "~/components/ui/chart"
 import { DateRangePicker } from "~/components/ui/date-range-picker"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { H1, P } from "~/components/ui/typography"
 import { formatCurrency, formatInteger, formatPercentage } from "~/lib/fmt"
 
+const chartData = [
+  { month: "Janeiro", desktop: 186, mobile: 80 },
+  { month: "Fevereiro", desktop: 305, mobile: 200 },
+  { month: "Março", desktop: 237, mobile: 120 },
+  { month: "Abril", desktop: 73, mobile: 190 },
+  { month: "Maio", desktop: 209, mobile: 130 },
+  { month: "Junho", desktop: 214, mobile: 140 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "hsl(var(--primary))",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "hsl(var(--muted-foreground))",
+  },
+} satisfies ChartConfig
+
 export default function HomePage() {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 20),
+  })
+
   return (
-    <div className="container space-y-10 py-8">
+    <div className="container space-y-12 py-8">
       <header className="flex items-center justify-between">
         <H1>Início</H1>
 
-        <DateRangePicker />
+        <DateRangePicker dateRange={dateRange} onSelectDateRange={setDateRange} />
       </header>
 
       <section className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
@@ -46,7 +81,7 @@ export default function HomePage() {
         />
       </section>
 
-      <Tabs defaultValue={TABS.RECEITA_TOTAL.KEY} className="space-y-4">
+      <Tabs defaultValue={TABS.RECEITA_TOTAL.KEY} className="space-y-6">
         <TabsList>
           <TabsTrigger value={TABS.RECEITA_TOTAL.KEY}>{TABS.RECEITA_TOTAL.TITLE}</TabsTrigger>
           <TabsTrigger value={TABS.VENDAS.KEY}>{TABS.VENDAS.TITLE}</TabsTrigger>
@@ -54,7 +89,50 @@ export default function HomePage() {
           <TabsTrigger value={TABS.NOVOS_CLIENTES.KEY}>{TABS.NOVOS_CLIENTES.TITLE}</TabsTrigger>
         </TabsList>
 
-        <TabsContent value={TABS.RECEITA_TOTAL.KEY}>TODO(WIP): A</TabsContent>
+        <TabsContent value={TABS.RECEITA_TOTAL.KEY}>
+          <Card>
+            <CardHeader>
+              <CardTitle>{TABS.RECEITA_TOTAL.TITLE}</CardTitle>
+              <CardDescription>Comparado com o último mês</CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              <ChartContainer className="h-48 w-full" config={chartConfig}>
+                <LineChart
+                  accessibilityLayer
+                  data={chartData}
+                  margin={{
+                    left: 12,
+                    right: 12,
+                  }}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="month"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={(value) => value.slice(0, 3)}
+                  />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                  <Line
+                    dataKey="desktop"
+                    type="monotone"
+                    stroke="var(--color-desktop)"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    dataKey="mobile"
+                    type="monotone"
+                    stroke="var(--color-mobile)"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value={TABS.VENDAS.KEY}>TODO(WIP): B</TabsContent>
 
@@ -79,7 +157,7 @@ function HomeInfo({
 }) {
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+      <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
         <CardTitle className="text-lg">{title}</CardTitle>
 
         <Icon className="text-muted-foreground size-5" />
