@@ -97,7 +97,7 @@ export default function HomePage() {
             </CardHeader>
 
             <CardContent>
-              <ChartContainer className="h-48 w-full" config={chartConfig}>
+              <ChartContainer className="max-h-60 w-full" config={chartConfig}>
                 <LineChart
                   accessibilityLayer
                   data={chartData}
@@ -118,6 +118,7 @@ export default function HomePage() {
                     type="monotone"
                     strokeWidth={2}
                     dataKey="mobile"
+                    dot={false}
                     activeDot={{
                       r: 4,
                       style: {
@@ -133,6 +134,7 @@ export default function HomePage() {
                     type="monotone"
                     dataKey="desktop"
                     strokeWidth={2}
+                    dot={false}
                     activeDot={{
                       r: 6,
                       style: {
