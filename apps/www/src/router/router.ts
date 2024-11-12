@@ -23,12 +23,21 @@ const routes: RouteObject[] = [
         },
         children: [
           {
-            path: "",
-            lazy: async () => {
-              const { default: HomePage } = await import("~/pages/home")
+            path: "analytics",
+            children: [
+              {
+                path: "regionalidade",
+                lazy: async () => {
+                  const { default: AnalyticsRegionalidadePage } = await import(
+                    "~/pages/analytics/regionalidade"
+                  )
 
-              return { Component: HomePage }
-            },
+                  return {
+                    Component: AnalyticsRegionalidadePage,
+                  }
+                },
+              },
+            ],
           },
         ],
       },

@@ -1,11 +1,11 @@
 import type { QueryClient } from "@tanstack/react-query"
 import { queryOptions, useQuery } from "@tanstack/react-query"
-import { ChevronsUpDown, Home, LogOut, Moon, Sun } from "lucide-react"
-import type { ExoticComponent } from "react"
+import { ChartPie, ChevronRight, ChevronsUpDown, LogOut, Moon, Sun } from "lucide-react"
 import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Button } from "~/components/ui/button"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,42 +20,36 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
 } from "~/components/ui/sidebar"
 import { Skeleton } from "~/components/ui/skeleton"
 import { useTheme } from "~/hooks/use-theme"
-import type { Org } from "~/schemas/org"
-import type { User } from "~/schemas/user"
 import { AuthServices } from "~/services/auth"
 import { OrgServices } from "~/services/org"
 
-const linkGroups: Array<{
-  label?: string
-  links: Array<{
-    title: string
-    path: string
-    icon: ExoticComponent
-  }>
-}> = [
+const navGroups = [
   {
+    title: "Analytics",
+    pathname: "/analytics",
+    icon: ChartPie,
     links: [
       {
-        title: "Início",
-        path: "/",
-        icon: Home,
+        title: "Regionalidade",
+        pathname: "/analytics/regionalidade",
       },
     ],
   },
-]
+] as const
 
 const userQueryOptions = queryOptions({
   queryKey: ["user"],
@@ -68,8 +62,8 @@ const orgQueryOptions = queryOptions({
 })
 
 type LoaderData = {
-  user: Promise<User>
-  org: Promise<Org>
+  user: ReturnType<typeof AuthServices.getUser>
+  org: ReturnType<typeof OrgServices.getOrg>
 }
 
 export function loader(queryClient: QueryClient) {
@@ -88,11 +82,11 @@ export default function DefaultLayout() {
 
   const userQuery = useQuery({
     ...userQueryOptions,
-    initialData: loaderData.user as unknown as User,
+    initialData: loaderData.user as unknown as Awaited<LoaderData["user"]>,
   })
   const orgQuery = useQuery({
     ...orgQueryOptions,
-    initialData: loaderData.org as unknown as Org,
+    initialData: loaderData.org as unknown as Awaited<LoaderData["org"]>,
   })
 
   const toggleTheme = () => {
@@ -136,29 +130,47 @@ export default function DefaultLayout() {
         </SidebarHeader>
 
         <SidebarContent>
-          {linkGroups.map((group, groupIndex) => (
-            <SidebarGroup key={groupIndex}>
-              {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+          <SidebarGroup>
+            <SidebarMenu>
+              {navGroups.map((navGroup) => {
+                const prefixMatch = location.pathname.startsWith(navGroup.pathname)
 
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {group.links.map((link) => (
-                    <SidebarMenuButton
-                      isActive={link.path === location.pathname}
-                      key={link.path}
-                      tooltip={link.title}
-                      asChild>
-                      <Link to={link.path}>
-                        {link.icon && <link.icon />}
+                return (
+                  <Collapsible
+                    asChild
+                    key={navGroup.title}
+                    defaultOpen={prefixMatch}
+                    className="group/collapsible">
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip={navGroup.title}>
+                          {navGroup.icon && <navGroup.icon />}
+                          <span>{navGroup.title}</span>
+                          <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
 
-                        <span>{link.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {navGroup.links?.map((link) => {
+                            const routeMatch = location.pathname === link.pathname
+
+                            return (
+                              <SidebarMenuSubItem key={link.title}>
+                                <SidebarMenuSubButton asChild isActive={routeMatch}>
+                                  <Link to={link.pathname}>{link.title}</Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            )
+                          })}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                )
+              })}
+            </SidebarMenu>
+          </SidebarGroup>
         </SidebarContent>
 
         <SidebarFooter>
